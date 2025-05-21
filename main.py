@@ -29,9 +29,9 @@ def update(screen, clock, updatables, drawables, bullets, asteroids, player, gam
         updatables.update(delta)
         # Check collisions
         for asteroid in asteroids:
-            # if asteroid.collide(player):
-            #     gameOver = True
-            #     print("Game over dude")
+            if asteroid.collide(player):
+                gameOver = True
+                print("Game over dude")
             for bullet in bullets:
                 if asteroid.collide(bullet):
                     asteroid.split()
