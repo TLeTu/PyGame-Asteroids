@@ -34,7 +34,7 @@ def update(screen, clock, updatables, drawables, bullets, asteroids, player, gam
             #     print("Game over dude")
             for bullet in bullets:
                 if asteroid.collide(bullet):
-                    asteroid.kill()
+                    asteroid.split()
                     bullet.kill()
 
         pygame.display.flip()
