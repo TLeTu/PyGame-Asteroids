@@ -30,9 +30,13 @@ def update(screen, clock, updatables, drawables, bullets, asteroids, player, gam
         # Check collisions
         for asteroid in asteroids:
             if asteroid.collide(player):
-                game_over(score, highscore)
-                gameOver = True
-                print("Game over dude")
+                if player.outOfLives():
+                    game_over(score, highscore)
+                    gameOver = True
+                    print("Game over dude")
+                else:
+                    player.delLive()
+                    player.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
             for bullet in bullets:
                 if asteroid.collide(bullet):
                     score += 1
@@ -41,6 +45,9 @@ def update(screen, clock, updatables, drawables, bullets, asteroids, player, gam
         
         score_text = font.render(f"Score: {score}", True, (255, 255, 255))  # White color
         screen.blit(score_text, (10, 10))  # Draw it at top-left corner
+
+        live_text = font.render(f"Lives: {player.lives}", True, (255, 255, 255))  # White color
+        screen.blit(live_text, (10, 50))  # Draw it at top-left corner
 
         pygame.display.flip()
 

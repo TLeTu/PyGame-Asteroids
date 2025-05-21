@@ -12,6 +12,7 @@ class Player(CircleShape):
         self.acceleration_rate = 400   # pixels per second²
         self.friction = 300            # pixels per second²
         self.cooldown = 0
+        self.lives = 3
     
     def triangle(self):
         forward = pygame.Vector2(0, -1).rotate(self.rotation)
@@ -35,6 +36,12 @@ class Player(CircleShape):
             foward = pygame.Vector2(0, -1).rotate(self.rotation)
             bullet.velocity = foward * PLAYER_SHOOT_SPEED
             self.cooldown = PLAYER_SHOOT_COOLDOWN
+
+    def outOfLives(self):
+        return self.lives <= 0
+    
+    def delLive(self):
+        self.lives -= 1
 
     def update(self, delta):
         keys = pygame.key.get_pressed()
