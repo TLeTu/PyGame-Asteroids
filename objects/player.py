@@ -1,6 +1,7 @@
 import pygame
 from objects.circleshape import CircleShape
 from constants import *
+from objects.bullet import Bullet
 
 class Player(CircleShape):
     def __init__(self, x, y):
@@ -10,6 +11,7 @@ class Player(CircleShape):
         self.max_speed = PLAYER_SPEED
         self.acceleration_rate = 400   # pixels per second²
         self.friction = 300            # pixels per second²
+        self.cooldown = 0
     
     def triangle(self):
         forward = pygame.Vector2(0, -1).rotate(self.rotation)
@@ -25,6 +27,15 @@ class Player(CircleShape):
     def rotate(self, delta):
         self.rotation += PLAYER_TURN_SPEED * delta
 
+    def shoot(self, delta):
+        if self.cooldown > 0:
+            self.cooldown -= delta
+        else:
+            bullet = Bullet(self.position.x, self.position.y, BULLET_RADIUS)
+            foward = pygame.Vector2(0, -1).rotate(self.rotation)
+            bullet.velocity = foward * PLAYER_SHOOT_SPEED
+            self.cooldown = PLAYER_SHOOT_COOLDOWN
+
     def update(self, delta):
         keys = pygame.key.get_pressed()
         
@@ -36,8 +47,8 @@ class Player(CircleShape):
         # Apply acceleration based on input
         if keys[pygame.K_w]:
             self.acceleration += forward * self.acceleration_rate
-        if keys[pygame.K_s]:
-            self.acceleration -= forward * self.acceleration_rate
+        # if keys[pygame.K_s]:
+        #     self.acceleration -= forward * self.acceleration_rate
         
         # Apply friction (slow down when no input)
         if self.acceleration.length() == 0 and self.velocity.length() > 0:
@@ -72,3 +83,7 @@ class Player(CircleShape):
             self.position.y = -self.radius
         elif self.position.y < -self.radius:
             self.position.y = SCREEN_HEIGHT + self.radius
+        
+        # SHOOT
+        if keys[pygame.K_SPACE]:
+            self.shoot(delta)

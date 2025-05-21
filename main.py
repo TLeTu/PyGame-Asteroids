@@ -3,6 +3,7 @@ from constants import *
 from objects.circleshape import CircleShape
 from objects.player import Player
 from objects.asteroid import Asteroid
+from objects.bullet import Bullet
 from asteroidfield import AsteroidField
 
 
@@ -27,10 +28,10 @@ def update(screen, clock, updatables, drawables, asteroids, player, gameOver):
         # Objects update
         updatables.update(delta)
         # Check collisions
-        for asteroid in asteroids:
-            if asteroid.collide(player):
-                gameOver = True
-                print("Game over dude")
+        # for asteroid in asteroids:
+        #     if asteroid.collide(player):
+        #         gameOver = True
+        #         print("Game over dude")
 
         pygame.display.flip()
 
@@ -54,6 +55,7 @@ def main():
     Player.containers = (updatables, drawables)
     Asteroid.containers = (asteroids, updatables, drawables)
     AsteroidField.containers = (updatables)
+    Bullet.containers = (updatables, drawables)
     asteroidField = AsteroidField()
     playerObj = Player(x, y)
 
