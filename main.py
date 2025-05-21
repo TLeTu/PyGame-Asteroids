@@ -8,7 +8,7 @@ from asteroidfield import AsteroidField
 
 
 
-def update(screen, clock, updatables, drawables, asteroids, player, gameOver):
+def update(screen, clock, updatables, drawables, bullets, asteroids, player, gameOver):
     while not gameOver:
         # Check if the the window have closed
         for event in pygame.event.get():
@@ -28,10 +28,14 @@ def update(screen, clock, updatables, drawables, asteroids, player, gameOver):
         # Objects update
         updatables.update(delta)
         # Check collisions
-        # for asteroid in asteroids:
-        #     if asteroid.collide(player):
-        #         gameOver = True
-        #         print("Game over dude")
+        for asteroid in asteroids:
+            # if asteroid.collide(player):
+            #     gameOver = True
+            #     print("Game over dude")
+            for bullet in bullets:
+                if asteroid.collide(bullet):
+                    asteroid.kill()
+                    bullet.kill()
 
         pygame.display.flip()
 
@@ -43,6 +47,7 @@ def main():
     updatables = pygame.sprite.Group()
     drawables = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
+    bullets = pygame.sprite.Group()
     # Setup FPS
     pyClock = pygame.time.Clock()
 
@@ -55,14 +60,14 @@ def main():
     Player.containers = (updatables, drawables)
     Asteroid.containers = (asteroids, updatables, drawables)
     AsteroidField.containers = (updatables)
-    Bullet.containers = (updatables, drawables)
+    Bullet.containers = (bullets, updatables, drawables)
     asteroidField = AsteroidField()
     playerObj = Player(x, y)
 
     gameOver = False
 
     # Game loop
-    update(screen, pyClock, updatables, drawables, asteroids, playerObj, gameOver)
+    update(screen, pyClock, updatables, drawables, bullets, asteroids, playerObj, gameOver)
     
 
 if __name__ == "__main__":
