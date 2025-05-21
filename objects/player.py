@@ -6,7 +6,6 @@ class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
-        self.velocity = pygame.Vector2(0, 0)
         self.acceleration = pygame.Vector2(0, 0)
         self.max_speed = PLAYER_SPEED
         self.acceleration_rate = 400   # pixels per second²
@@ -62,3 +61,14 @@ class Player(CircleShape):
             self.rotate(-delta)
         if keys[pygame.K_d]:
             self.rotate(delta)
+
+        # Check if player is out of screen
+        if self.position.x > SCREEN_WIDTH + self.radius:
+            self.position.x = -self.radius
+        elif self.position.x < -self.radius:
+            self.position.x = SCREEN_WIDTH + self.radius
+
+        if self.position.y > SCREEN_HEIGHT + self.radius:
+            self.position.y = -self.radius
+        elif self.position.y < -self.radius:
+            self.position.y = SCREEN_HEIGHT + self.radius
