@@ -8,7 +8,7 @@ from asteroidfield import AsteroidField
 
 
 
-def update(screen, clock, updatables, drawables, bullets, asteroids, player, gameOver, score, font):
+def update(screen, clock, updatables, drawables, bullets, asteroids, player, gameOver, score, font, highscore):
     while not gameOver:
         # Check if the the window have closed
         for event in pygame.event.get():
@@ -30,6 +30,7 @@ def update(screen, clock, updatables, drawables, bullets, asteroids, player, gam
         # Check collisions
         for asteroid in asteroids:
             if asteroid.collide(player):
+                game_over(score, highscore)
                 gameOver = True
                 print("Game over dude")
             for bullet in bullets:
@@ -43,6 +44,18 @@ def update(screen, clock, updatables, drawables, bullets, asteroids, player, gam
 
         pygame.display.flip()
 
+def game_over(score, highscore):
+    if score > highscore:
+        highscore = score
+        with open("highscore.txt", "w") as f:
+            f.write(str(highscore))
+
+def load_highscore():
+    try:
+        with open("highscore.txt", "r") as f:
+            return int(f.read())
+    except:
+        return 0  # If file doesn't exist or is corrupted
 
 def main():
     # Initialize pygame
@@ -69,11 +82,12 @@ def main():
     playerObj = Player(x, y)
 
     gameOver = False
-    score = 0
+    score = load_highscore()
+    highscore = load_highscore()
     font = pygame.font.SysFont(None, 36)  # Font type and size
 
     # Game loop
-    update(screen, pyClock, updatables, drawables, bullets, asteroids, playerObj, gameOver, score, font)
+    update(screen, pyClock, updatables, drawables, bullets, asteroids, playerObj, gameOver, score, font, highscore)
     
 
 if __name__ == "__main__":
