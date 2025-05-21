@@ -1,7 +1,7 @@
 import pygame
 from constants import *
-from objects.circleshape import *
-from objects.player import *
+from objects.circleshape import CircleShape
+from objects.player import Player
 
 
 
@@ -14,11 +14,12 @@ def update(screen, clock, delta, player):
 
         # Fill it with black
         screen.fill((0, 0, 0), rect = None, special_flags = 0)
-        pygame.display.flip()
 
         # Draw the player
         player.draw(screen)
 
+        pygame.display.flip()
+        
         # Set FPS
         delta[0] = clock.tick(60) / 1000 # 60 FPS
 
@@ -36,10 +37,10 @@ def main():
     # Initialize player
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
-    player = player(x, y)
+    playerObj = Player(x, y)
 
     # Game loop
-    update(screen, pyClock, delta, player)
+    update(screen, pyClock, delta, playerObj)
     
 
 if __name__ == "__main__":
