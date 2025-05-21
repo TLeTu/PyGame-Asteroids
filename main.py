@@ -73,6 +73,22 @@ def update(screen, clock, updatables, drawables, bullets, asteroids, player, gam
         live_text = font.render(f"Lives: {player.lives}", True, (255, 255, 255))  # White color
         screen.blit(live_text, (10, 50))  # Draw it at top-left corner
 
+        # Clean up off-screen asteroids (with buffer)
+        for asteroid in asteroids:
+            if (
+                asteroid.position.x < -100 or asteroid.position.x > SCREEN_WIDTH + 100 or
+                asteroid.position.y < -100 or asteroid.position.y > SCREEN_HEIGHT + 100
+            ):
+                asteroid.kill()
+
+        # Clean up off-screen bullets (no buffer)
+        for bullet in bullets:
+            if (
+                bullet.position.x < 0 or bullet.position.x > SCREEN_WIDTH or
+                bullet.position.y < 0 or bullet.position.y > SCREEN_HEIGHT
+            ):
+                bullet.kill()
+
         pygame.display.flip()
 
 def game_over(score, highscore):
