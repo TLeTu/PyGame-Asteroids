@@ -5,6 +5,8 @@ from objects.player import Player
 from objects.asteroid import Asteroid
 from objects.bullet import Bullet
 from asteroidfield import AsteroidField
+
+
 import builtins
 
 try:
@@ -79,8 +81,7 @@ def game_over(score, highscore):
         save_highscore_js(highscore)
     return highscore
 
-
-def main():
+async def main():
     # Initialize pygame
     pygame.init()
     # Initalize group
@@ -111,7 +112,7 @@ def main():
 
     # Game loop
     update(screen, pyClock, updatables, drawables, bullets, asteroids, playerObj, gameOver, score, font, highscore)
-    
 
-if __name__ == "__main__":
-    main()
+
+import asyncio
+asyncio.run(main())
