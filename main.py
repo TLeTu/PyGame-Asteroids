@@ -5,7 +5,7 @@ from objects.player import Player
 
 
 
-def update(screen, clock, player):
+def update(screen, clock, updatables, drawables):
     while True:
         # Check if the the window have closed
         for event in pygame.event.get():
@@ -16,13 +16,14 @@ def update(screen, clock, player):
         screen.fill((0, 0, 0), rect = None, special_flags = 0)
 
         # Draw the player
-        player.draw(screen)
+        for obj in drawables:
+            obj.draw(screen)
         
         # Set FPS
         delta = clock.tick(60) / 1000 # 60 FPS
-        
+
         # Player update
-        player.update(delta)
+        updatables.update(delta)
 
         pygame.display.flip()
 
@@ -30,6 +31,9 @@ def update(screen, clock, player):
 def main():
     # Initialize pygame
     pygame.init()
+    # Initalize group
+    updatables = pygame.sprite.Group()
+    drawables = pygame.sprite.Group()
     # Setup FPS
     pyClock = pygame.time.Clock()
 
@@ -39,10 +43,11 @@ def main():
     # Initialize player
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
+    Player.containers = (updatables, drawables)
     playerObj = Player(x, y)
 
     # Game loop
-    update(screen, pyClock, playerObj)
+    update(screen, pyClock, updatables, drawables)
     
 
 if __name__ == "__main__":
