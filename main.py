@@ -8,7 +8,7 @@ from asteroidfield import AsteroidField
 
 
 
-def update(screen, clock, updatables, drawables, bullets, asteroids, player, gameOver):
+def update(screen, clock, updatables, drawables, bullets, asteroids, player, gameOver, score, font):
     while not gameOver:
         # Check if the the window have closed
         for event in pygame.event.get():
@@ -34,8 +34,12 @@ def update(screen, clock, updatables, drawables, bullets, asteroids, player, gam
                 print("Game over dude")
             for bullet in bullets:
                 if asteroid.collide(bullet):
+                    score += 1
                     asteroid.split()
                     bullet.kill()
+        
+        score_text = font.render(f"Score: {score}", True, (255, 255, 255))  # White color
+        screen.blit(score_text, (10, 10))  # Draw it at top-left corner
 
         pygame.display.flip()
 
@@ -65,9 +69,11 @@ def main():
     playerObj = Player(x, y)
 
     gameOver = False
+    score = 0
+    font = pygame.font.SysFont(None, 36)  # Font type and size
 
     # Game loop
-    update(screen, pyClock, updatables, drawables, bullets, asteroids, playerObj, gameOver)
+    update(screen, pyClock, updatables, drawables, bullets, asteroids, playerObj, gameOver, score, font)
     
 
 if __name__ == "__main__":
