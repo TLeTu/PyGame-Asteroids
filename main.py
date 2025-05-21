@@ -5,6 +5,28 @@ from objects.player import Player
 from objects.asteroid import Asteroid
 from objects.bullet import Bullet
 from asteroidfield import AsteroidField
+import builtins
+
+try:
+    import js
+    def save_highscore_js(score):
+        js.localStorage.setItem("highscore", str(score))
+
+    def load_highscore_js():
+        stored = js.localStorage.getItem("highscore")
+        return int(stored) if stored else 0
+except ImportError:
+    # fallback for desktop
+    def save_highscore_js(score):
+        with open("highscore.txt", "w") as f:
+            f.write(str(score))
+
+    def load_highscore_js():
+        try:
+            with open("highscore.txt", "r") as f:
+                return int(f.read())
+        except:
+            return 0
 
 
 
@@ -54,15 +76,9 @@ def update(screen, clock, updatables, drawables, bullets, asteroids, player, gam
 def game_over(score, highscore):
     if score > highscore:
         highscore = score
-        with open("highscore.txt", "w") as f:
-            f.write(str(highscore))
+        save_highscore_js(highscore)
+    return highscore
 
-def load_highscore():
-    try:
-        with open("highscore.txt", "r") as f:
-            return int(f.read())
-    except:
-        return 0  # If file doesn't exist or is corrupted
 
 def main():
     # Initialize pygame
@@ -89,8 +105,8 @@ def main():
     playerObj = Player(x, y)
 
     gameOver = False
-    score = load_highscore()
-    highscore = load_highscore()
+    score = 0
+    highscore = highscore = load_highscore_js()
     font = pygame.font.SysFont(None, 36)  # Font type and size
 
     # Game loop
